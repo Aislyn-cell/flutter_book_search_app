@@ -8,19 +8,18 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 class HomePage extends ConsumerStatefulWidget {
   const HomePage({super.key});
 
-  // 3. createState 의 반환타입 변경
+  // 2. createState 의 반환타입 변경
   @override
   ConsumerState<HomePage> createState() => _HomePageState();
 }
 
-// 1. ConsumerState로 변경
 class _HomePageState extends ConsumerState<HomePage> {
   TextEditingController textEditingController = TextEditingController();
 
   void search(String text) {
-    // 8. 검색 시 뷰모델의 search함수 호출
+    // 3. 검색 시 뷰모델의 search함수 호출
     ref.read(homeViewModelProvider.notifier).search(text);
-    print("search");
+    print("search: $text");
   }
 
   @override
@@ -45,9 +44,9 @@ class _HomePageState extends ConsumerState<HomePage> {
             onSubmitted: search,
             decoration: InputDecoration(
               hintText: '검색어를 입력해 주세요',
-              border: WidgetStateInputBorder.resolveWith(
+              border: MaterialStateOutlineInputBorder.resolveWith(
                 (states) {
-                  if (states.contains(WidgetState.focused)) {
+                  if (states.contains(MaterialState.focused)) {
                     return OutlineInputBorder(
                       borderRadius: BorderRadius.circular(10),
                       borderSide: const BorderSide(color: Colors.black),
@@ -87,7 +86,7 @@ class _HomePageState extends ConsumerState<HomePage> {
           ),
           itemBuilder: (context, index) {
             // 6. book 하나씩 가져오기
-            Book book = homeState.books![index];
+            final Book book = homeState.books![index];
             return GestureDetector(
               onTap: () {
                 print('item tap');
@@ -103,6 +102,22 @@ class _HomePageState extends ConsumerState<HomePage> {
                 // 7. 데이터 씌우기
                 book.image,
                 fit: BoxFit.cover,
+                loadingBuilder: (BuildContext context, Widget child,
+                    ImageChunkEvent? loadingProgress) {
+                  if (loadingProgress == null) return child;
+                  return Center(
+                    child: CircularProgressIndicator(
+                      value: loadingProgress.expectedTotalBytes != null
+                          ? loadingProgress.cumulativeBytesLoaded /
+                              loadingProgress.expectedTotalBytes!
+                          : null,
+                    ),
+                  );
+                },
+                errorBuilder: (BuildContext context, Object error,
+                    StackTrace? stackTrace) {
+                  return const Center(child: Text('이미지 로드 실패'));
+                },
               ),
             );
           },

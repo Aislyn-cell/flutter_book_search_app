@@ -1,13 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_book_search_app/data/model/book.dart';
-import 'package:flutter_book_search_app/ui/pages/detail/detail_page.dart';
+import 'package:flutter_book_search_app/ui/pages/detail/widgets/detail_page.dart';
 
 class HomeBottomSheet extends StatelessWidget {
-  // 2. 생성자에 추가
-  const HomeBottomSheet(this.book, {super.key});
-
-  // 1. 홈페이지에서 전달해줄 수 있게 추가
   final Book book;
+
+  const HomeBottomSheet(this.book, {super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -22,10 +20,16 @@ class HomeBottomSheet extends StatelessWidget {
       ),
       child: Row(
         children: [
-          // 3. 데이터 씌우기
           Image.network(
             book.image,
             fit: BoxFit.fitHeight,
+            errorBuilder: (context, error, stackTrace) {
+              return const SizedBox(
+                height: 150,
+                width: 100,
+                child: Center(child: Text('이미지 없음')),
+              );
+            },
           ),
           const SizedBox(width: 20),
           Expanded(
@@ -42,13 +46,15 @@ class HomeBottomSheet extends StatelessWidget {
                   overflow: TextOverflow.ellipsis,
                 ),
                 Text(
-                  book.author,
+                  book.author, // 'author'가 String이라고 가정
                   style: const TextStyle(
                     fontSize: 14,
                   ),
+                  maxLines: 1,
+                  overflow: TextOverflow.ellipsis,
                 ),
                 Text(
-                  book.description,
+                  book.description, // 'description'을 부제목/설명으로 가정
                   style: const TextStyle(
                     fontSize: 14,
                   ),
@@ -58,12 +64,16 @@ class HomeBottomSheet extends StatelessWidget {
                 const Spacer(),
                 GestureDetector(
                   onTap: () {
-                    // 자세히 보기 터치했을 때 DetailPage로 가게 미리 구현
-                    Navigator.push(context, MaterialPageRoute(
-                      builder: (context) {
-                        return DetailPage(book);
-                      },
-                    ));
+                    // Book 객체를 위치 인수로 전달
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) {
+                          return DetailPage(
+                              book); // DetailPage가 위치 인수로 Book을 받는다고 가정
+                        },
+                      ),
+                    );
                   },
                   child: Container(
                     width: double.infinity,
@@ -78,7 +88,7 @@ class HomeBottomSheet extends StatelessWidget {
                       ),
                     ),
                   ),
-                )
+                ),
               ],
             ),
           ),
