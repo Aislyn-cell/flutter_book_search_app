@@ -99,8 +99,7 @@ class _HomePageState extends ConsumerState<HomePage> {
                 );
               },
               child: Image.network(
-                // 7. 데이터 씌우기
-                book.image,
+                'https://picsum.photos/200/300',
                 fit: BoxFit.cover,
                 loadingBuilder: (BuildContext context, Widget child,
                     ImageChunkEvent? loadingProgress) {
