@@ -16,7 +16,7 @@ class HomeViewModel extends Notifier<HomeState> {
     return HomeState(books: null);
   }
 
-  // 4. Repository에서 데이터 받아와서 상태 업데이트 해주기!
+  // 4. Repository에서 데이터 받아와서 상태 업데이트 해주기
   Future<void> search(String query) async {
     BookRepository bookRepository = BookRepository();
     state = HomeState(
@@ -27,8 +27,7 @@ class HomeViewModel extends Notifier<HomeState> {
 
 // 5. HomeViewModel을 관리할 관리자 만들어주기
 // NotifierProvider<HomeViewModel, HomeState>
-// => HomeState 상태를 관리하는 HomeViewModel 관리해주세요.
-// ref.watch를 통해 homeViewModelProvider를 부르면 아직 생성안됐으면 만들어서 주고, 있으면 있던거 주세요!
+// => HomeState 상태를 관리하는 HomeViewModel 관리해주기
 final homeViewModelProvider = NotifierProvider<HomeViewModel, HomeState>(() {
   return HomeViewModel();
 });

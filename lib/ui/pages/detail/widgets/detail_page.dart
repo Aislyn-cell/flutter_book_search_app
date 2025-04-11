@@ -1,9 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_book_search_app/data/model/book.dart';
+// Removed duplicate or incorrect import
 import 'package:flutter_inappwebview/flutter_inappwebview.dart';
 
 class DetailPage extends StatelessWidget {
-  const DetailPage(this.book, {super.key});
+  const DetailPage({super.key, required this.book});
 
   final Book book;
 
